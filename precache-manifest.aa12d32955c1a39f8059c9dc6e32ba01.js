@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "45d030bf4d1b2e44b9b1a9d8d2390920",
+    "revision": "2975f36a93b3563e170b89df2d76d636",
     "url": "/EduwebReact/index.html"
   },
   {
-    "revision": "20e1e9cbe884180e330c",
-    "url": "/EduwebReact/static/css/main.f26aea4e.chunk.css"
+    "revision": "4dcda4bae0e84499eb6b",
+    "url": "/EduwebReact/static/css/main.bbc05acd.chunk.css"
   },
   {
     "revision": "c57cfc6d176c82aed860",
@@ -16,7 +16,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/EduwebReact/static/js/2.d46c52c4.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "20e1e9cbe884180e330c",
+    "revision": "4dcda4bae0e84499eb6b",
     "url": "/EduwebReact/static/js/main.f8687499.chunk.js"
   },
   {
