@@ -3,7 +3,7 @@ import ThreeScene from './Three'
 function Grid1() {
     return (
         <div className="PhysicsContainer">
-            <h1>Physics <i class="fi-cwldxl-arrow-solid"></i></h1>
+            <h1>Physics <i className="fi-cwldxl-arrow-solid"></i></h1>
             <div className="VectorAddition">
                 <h2>Vectors and vectors addition</h2>
                 <h4>
