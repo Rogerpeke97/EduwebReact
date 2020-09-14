@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/EduwebReact/precache-manifest.c71909eb2b7717c5644c0cb74ea3e946.js"
+  "/EduwebReact/precache-manifest.6406c0ad79817e0eb2a355000ccec954.js"
 );
 
 self.addEventListener('message', (event) => {

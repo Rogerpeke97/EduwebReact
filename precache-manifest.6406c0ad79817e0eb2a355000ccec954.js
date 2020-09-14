@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "1572c52c6749772d4a43d14c5ce9671f",
+    "revision": "45d030bf4d1b2e44b9b1a9d8d2390920",
     "url": "/EduwebReact/index.html"
   },
   {
