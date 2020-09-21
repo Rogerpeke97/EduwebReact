@@ -52,6 +52,20 @@ function ThreeScene() {
             .target
             .set(0, 0, 0)
 
+
+        // BIG GRID 
+        /*let bigGridGeometry = new THREE.PlaneGeometry(20, 20, 16, 9);
+        let bigGridMaterial = new THREE.MeshBasicMaterial({color: 'white', opacity: 0.5, transparent: true, wireframe: true, side: THREE.DoubleSide});
+        let bigGrid = new THREE.Mesh(bigGridGeometry, bigGridMaterial);*/
+
+        let gridHelper = new THREE.GridHelper( 20, 20 );
+        let axisGrid = new THREE.Vector3(1, 0, 0);
+        gridHelper.rotateOnAxis(axisGrid, 1.5708)// THE ANGLE IS IN RADIANS, THIS IS 90 DEG
+        scene.add(gridHelper);
+
+
+
+
         let pointsX = []; // X AXIS LINE
 
         pointsX.push(new THREE.Vector3(- 10, 0, 0));
@@ -149,7 +163,8 @@ function ThreeScene() {
 
         let pointVector1 = []
         pointVector1.push(new THREE.Vector3(0, 0, 0));
-        pointVector1.push(new THREE.Vector3(10, 10, 0));
+        pointVector1.push(new THREE.Vector3(0, 0, 0));
+        pointVector1.push(new THREE.Vector3(0, 0, 0));
         let geometryVector = new THREE
             .BufferGeometry()
             .setFromPoints(pointVector1); // VECTOR 1 LINE
@@ -166,19 +181,19 @@ function ThreeScene() {
             VectorInput.id = 'slider-fg' + i
             let slider = document.getElementById('slider-fg' + i);
             slider.addEventListener('change', () => {
-                VectorX.geometry.attributes.position.needsUpdate = true; // required after the first render
                 let array = VectorX.geometry.attributes.position.array
-                let arrayTest = [0, 0, 0, gui.__controllers[0].getValue(), gui.__controllers[1].getValue(), gui.__controllers[2].getValue()]
+                let arrayTest = [0, 0, 0, 0, 0, 0, gui.__controllers[0].getValue(), gui.__controllers[1].getValue(), gui.__controllers[2].getValue()]
                 arrayTest = new Float32Array(arrayTest)
                 console.log(array)
                 console.log(arrayTest)
                 let tween = new TWEEN
                     .Tween(array)
-                    .to(arrayTest, 0.05)
+                    .to(arrayTest)
                     .start()
                 function animateTween(time) {
                     TWEEN.update(time)
                     requestAnimationFrame(animateTween)
+                    VectorX.geometry.attributes.position.needsUpdate = true; // required after the first render
                 }
                 requestAnimationFrame(animateTween)
             })

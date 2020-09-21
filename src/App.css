@@ -5,12 +5,9 @@
     width: 100%;
 }
 .Container {
-    background-color: rgb(17, 17, 44);
     color: white;
-    max-width: 1920px;
-    min-width: 98%;
     font-size: 90%;
-    padding: 1%;
+    width: 100%;
     text-shadow: 0px 0px 5px whitesmoke;
 }
 #CanvasContainer {
@@ -25,7 +22,8 @@
 }
 
 .PhysicsContainer{
-  max-width: 100%;
+  max-width: 1920px;
+  padding: 5%;
 }
 .PhysicsContainer > h1 {
     display: flex;
