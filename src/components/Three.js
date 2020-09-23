@@ -36,9 +36,8 @@ function ThreeScene() {
         console.log(params.Vector1x)
 
         scene.add(new THREE.AmbientLight(0x222222));
-        scene.add(new THREE.AxesHelper(5));
 
-        let light = new THREE.PointLight('white', 3, 200);
+        let light = new THREE.PointLight('whitesmoke', 3, 200);
         light
             .position
             .set(0, 5, 10);
@@ -52,19 +51,19 @@ function ThreeScene() {
             .target
             .set(0, 0, 0)
 
-
-        // BIG GRID 
+        // BIG GRID
         /*let bigGridGeometry = new THREE.PlaneGeometry(20, 20, 16, 9);
         let bigGridMaterial = new THREE.MeshBasicMaterial({color: 'white', opacity: 0.5, transparent: true, wireframe: true, side: THREE.DoubleSide});
         let bigGrid = new THREE.Mesh(bigGridGeometry, bigGridMaterial);*/
+        //HORIZONTAL GRID
+        let gridHelperZaxis = new THREE.GridHelper(20, 20);
+        scene.add(gridHelperZaxis);
 
-        let gridHelper = new THREE.GridHelper( 20, 20 );
+        //VERTICAL GRID
+        let gridHelper = new THREE.GridHelper(20, 20);
         let axisGrid = new THREE.Vector3(1, 0, 0);
-        gridHelper.rotateOnAxis(axisGrid, 1.5708)// THE ANGLE IS IN RADIANS, THIS IS 90 DEG
+        gridHelper.rotateOnAxis(axisGrid, 1.5708) // THE ANGLE IS IN RADIANS, THIS IS 90 DEG
         scene.add(gridHelper);
-
-
-
 
         let pointsX = []; // X AXIS LINE
 
@@ -160,7 +159,7 @@ function ThreeScene() {
         });
 
         // VECTORS
-
+        let vectorMaterial1 = new THREE.LineBasicMaterial({color: 'green'});
         let pointVector1 = []
         pointVector1.push(new THREE.Vector3(0, 0, 0));
         pointVector1.push(new THREE.Vector3(0, 0, 0));
@@ -169,10 +168,16 @@ function ThreeScene() {
             .BufferGeometry()
             .setFromPoints(pointVector1); // VECTOR 1 LINE
 
-        let VectorX = new THREE.Line(geometryVector, material2);
+        let VectorX = new THREE.Line(geometryVector, vectorMaterial1);
         VectorX
             .position
             .set(0, 0, 0)
+        let geometryCone = new THREE.SphereGeometry(0.1, 32, 64);
+        let materialCone = new THREE.MeshPhongMaterial({color: 'green'});
+        let cone = new THREE.Mesh(geometryCone, materialCone);
+
+        VectorX.add(cone);
+
         scene.add(VectorX)
 
         for (let i = 0; i < 3; i++) {
@@ -182,18 +187,53 @@ function ThreeScene() {
             let slider = document.getElementById('slider-fg' + i);
             slider.addEventListener('change', () => {
                 let array = VectorX.geometry.attributes.position.array
-                let arrayTest = [0, 0, 0, 0, 0, 0, gui.__controllers[0].getValue(), gui.__controllers[1].getValue(), gui.__controllers[2].getValue()]
+                let arrayTest = [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    gui
+                        .__controllers[0]
+                        .getValue(),
+                    gui
+                        .__controllers[1]
+                        .getValue(),
+                    gui
+                        .__controllers[2]
+                        .getValue()
+                ]
                 arrayTest = new Float32Array(arrayTest)
-                console.log(array)
-                console.log(arrayTest)
-                let tween = new TWEEN
+
+                //VECTOR ARROW
+
+                 new TWEEN
                     .Tween(array)
                     .to(arrayTest)
-                    .start()
+                    .onStart(() => {
+                        new TWEEN
+                            .Tween(cone.position)
+                            .to({
+                                x: gui
+                                    .__controllers[0]
+                                    .getValue(),
+                                y: gui
+                                    .__controllers[1]
+                                    .getValue(),
+                                z: gui
+                                    .__controllers[2]
+                                    .getValue(),
+                                isVector3: true
+                            })
+                            .start();
+                    })
+                    .start();
                 function animateTween(time) {
                     TWEEN.update(time)
                     requestAnimationFrame(animateTween)
                     VectorX.geometry.attributes.position.needsUpdate = true; // required after the first render
+                    // cone.setRotationFromAxisAngle(coneRotation, coneRotationCalculator)
                 }
                 requestAnimationFrame(animateTween)
             })
