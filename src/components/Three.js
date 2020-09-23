@@ -159,7 +159,7 @@ function ThreeScene() {
         });
 
         // VECTORS
-        let vectorMaterial1 = new THREE.LineBasicMaterial({color: 'green'});
+        let vectorMaterial1 = new THREE.MeshBasicMaterial({color: 'green'});
         let pointVector1 = []
         pointVector1.push(new THREE.Vector3(0, 0, 0));
         pointVector1.push(new THREE.Vector3(0, 0, 0));
@@ -177,6 +177,7 @@ function ThreeScene() {
         let cone = new THREE.Mesh(geometryCone, materialCone);
 
         VectorX.add(cone);
+        VectorX.frustumCulled = false; // PREVENTS LINE FROM DISAPPEARING WHEN IT'S OUT OF CAMERA FRAME
 
         scene.add(VectorX)
 
@@ -205,35 +206,24 @@ function ThreeScene() {
                         .getValue()
                 ]
                 arrayTest = new Float32Array(arrayTest)
+    
+                //VECTOR ARROW        
 
-                //VECTOR ARROW
-
-                 new TWEEN
+                new TWEEN
                     .Tween(array)
                     .to(arrayTest)
-                    .onStart(() => {
+                    .onStart(()=>{
                         new TWEEN
-                            .Tween(cone.position)
-                            .to({
-                                x: gui
-                                    .__controllers[0]
-                                    .getValue(),
-                                y: gui
-                                    .__controllers[1]
-                                    .getValue(),
-                                z: gui
-                                    .__controllers[2]
-                                    .getValue(),
-                                isVector3: true
-                            })
-                            .start();
+                        .Tween(cone.position)
+                        .to({x: gui.__controllers[0].getValue(), y: gui.__controllers[1].getValue(), z: gui.__controllers[2].getValue(), isVector3: true})
+                        .start();
                     })
                     .start();
                 function animateTween(time) {
                     TWEEN.update(time)
                     requestAnimationFrame(animateTween)
                     VectorX.geometry.attributes.position.needsUpdate = true; // required after the first render
-                    // cone.setRotationFromAxisAngle(coneRotation, coneRotationCalculator)
+               // cone.setRotationFromAxisAngle(coneRotation, coneRotationCalculator)
                 }
                 requestAnimationFrame(animateTween)
             })
