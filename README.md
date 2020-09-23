@@ -1,5 +1,5 @@
 ## Frontend created using `three.js` and `react`
-Frontend for future educational social media website.<br />
+Frontend for future Vector calculator.<br />
 At the moment trying to recreate simple vector examples.<br />
 Currently under development, demo with current progress in the link of the repo.
 
