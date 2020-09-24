@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/EduwebReact/static/css/main.5c183e3a.chunk.css",
-    "main.js": "/EduwebReact/static/js/main.54a4aada.chunk.js",
-    "main.js.map": "/EduwebReact/static/js/main.54a4aada.chunk.js.map",
+    "main.js": "/EduwebReact/static/js/main.f024c4bb.chunk.js",
+    "main.js.map": "/EduwebReact/static/js/main.f024c4bb.chunk.js.map",
     "runtime-main.js": "/EduwebReact/static/js/runtime-main.60d61582.js",
     "runtime-main.js.map": "/EduwebReact/static/js/runtime-main.60d61582.js.map",
     "static/js/2.888a1d98.chunk.js": "/EduwebReact/static/js/2.888a1d98.chunk.js",
     "static/js/2.888a1d98.chunk.js.map": "/EduwebReact/static/js/2.888a1d98.chunk.js.map",
     "index.html": "/EduwebReact/index.html",
-    "precache-manifest.495a111acc4902ccdc2ce51aaeed796f.js": "/EduwebReact/precache-manifest.495a111acc4902ccdc2ce51aaeed796f.js",
+    "precache-manifest.32ab016f7b5d909183812c8e82d14c95.js": "/EduwebReact/precache-manifest.32ab016f7b5d909183812c8e82d14c95.js",
     "service-worker.js": "/EduwebReact/service-worker.js",
     "static/css/main.5c183e3a.chunk.css.map": "/EduwebReact/static/css/main.5c183e3a.chunk.css.map",
     "static/js/2.888a1d98.chunk.js.LICENSE.txt": "/EduwebReact/static/js/2.888a1d98.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.60d61582.js",
     "static/js/2.888a1d98.chunk.js",
     "static/css/main.5c183e3a.chunk.css",
-    "static/js/main.54a4aada.chunk.js"
+    "static/js/main.f024c4bb.chunk.js"
   ]
 }
