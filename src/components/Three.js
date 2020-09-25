@@ -11,14 +11,18 @@ function ThreeScene() {
         let canvasContainer = document.getElementById('CanvasContainer')
         let scene = new THREE.Scene();
         let camera = new THREE.PerspectiveCamera(75, canvasContainer.clientWidth / canvasContainer.clientHeight, 0.1, 1000);
-        let renderer = new THREE.WebGLRenderer();
+        let renderer = new THREE.WebGLRenderer({antialias: true});
         camera
             .position
             .set(0, 0, 10);
         let params = {
             Vector1x: 0,
             Vector1y: 0,
-            Vector1z: 0
+            Vector1z: 0,
+            AddVector2: false,
+            Vector2x: 0,
+            Vector2y: 0,
+            Vector2z: 0
         }
         let gui = new dat.GUI({autoPlace: false});
         gui.domElement.id = 'gui';
@@ -32,8 +36,18 @@ function ThreeScene() {
         gui
             .add(params, 'Vector1z')
             .name('Vector1z')
-
-        console.log(params.Vector1x)
+        gui
+            .add(params, 'AddVector2')
+            .name('AddVector2')
+        gui
+            .add(params, 'Vector2x')
+            .name('Vector2x')
+        gui
+            .add(params, 'Vector2y')
+            .name('Vector2y')
+        gui
+            .add(params, 'Vector1z')
+            .name('Vector2z')
 
         scene.add(new THREE.AmbientLight(0x222222));
 
@@ -166,22 +180,92 @@ function ThreeScene() {
         pointVector1.push(new THREE.Vector3(0, 0, 0));
         let geometryVector = new THREE
             .BufferGeometry()
-            .setFromPoints(pointVector1); // VECTOR 1 LINE
+            .setFromPoints(pointVector1);
+        let pointVector2 = []
+        pointVector2.push(new THREE.Vector3(0, 0, 0));
+        pointVector2.push(new THREE.Vector3(0, 0, 0));
+        pointVector2.push(new THREE.Vector3(0, 0, 0));
+        let geometryVector2 = new THREE
+            .BufferGeometry()
+            .setFromPoints(pointVector2);
+
+        //GEOMETRY FOR THE CIRCLES
+
+        let geometryCircle = new THREE.SphereGeometry(0.1, 32, 64);
+        let materialCircle = new THREE.MeshPhongMaterial({color: 'green'});
+        let materialCircle2 = new THREE.MeshPhongMaterial({color: 'blue'});
+
+        //VECTOR 2 HIDE GUI VECTOR 2 UNTIL BOOLEAN IS CLICKED
+
+        for (let f = 4; f <= 6; f++) {
+            let vector2Div = document.querySelectorAll('.cr')[f];
+            vector2Div.id = "vector2Div" + f;
+            document
+                .getElementById('vector2Div' + f)
+                .style
+                .display = 'none';
+        }
+
+        //VECTOR 2 FUNCTION
+        function vector2Add() {
+            if (document.getElementById('vector2Div4').style.display === 'none') {
+
+                for (let i = 4; i <= 6; i++) {
+                    let VectorInput = document.querySelectorAll('.c')[i];
+                    console.log(VectorInput)
+                    VectorInput.id = 'slider-fg' + i
+                    let slider = document.getElementById('slider-fg' + i);
+                    slider.addEventListener('change', () => {})
+                }
+            }
+        }
+
+        let AddVector2Bool = document.querySelectorAll('.cr')[3];
+        AddVector2Bool.id = "AddVector2Bool";
+        document
+            .getElementById('AddVector2Bool')
+            .addEventListener('change', () => {
+                vector2Add();
+                for (let i = 4; i <= 6; i++) {
+                    document
+                        .getElementById('vector2Div' + i)
+                        .style
+                        .display = 'grid';
+                    document
+                        .getElementById('AddVector2Bool')
+                        .style
+                        .display = 'none'
+                }
+
+            })
+
+        // VECTOR 1  and VECTOR 2 LINE
+        let vectorMaterial2 = new THREE.MeshBasicMaterial({color: 'blue'});
+        let Vector2 = new THREE.Line(geometryVector2, vectorMaterial2);
+        Vector2
+            .position
+            .set(0, 0, 0)
+
+        let circle2 = new THREE.Mesh(geometryCircle, materialCircle2);
+
+        Vector2.add(circle2);
+        Vector2.frustumCulled = false; // PREVENTS LINE FROM DISAPPEARING WHEN IT'S OUT OF CAMERA FRAME
+
+        scene.add(Vector2)
 
         let VectorX = new THREE.Line(geometryVector, vectorMaterial1);
         VectorX
             .position
             .set(0, 0, 0)
-        let geometryCone = new THREE.SphereGeometry(0.1, 32, 64);
-        let materialCone = new THREE.MeshPhongMaterial({color: 'green'});
-        let cone = new THREE.Mesh(geometryCone, materialCone);
 
-        VectorX.add(cone);
+        let circle = new THREE.Mesh(geometryCircle, materialCircle);
+
+        VectorX.add(circle);
         VectorX.frustumCulled = false; // PREVENTS LINE FROM DISAPPEARING WHEN IT'S OUT OF CAMERA FRAME
 
         scene.add(VectorX)
 
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 7; i++) {
             let VectorInput = document.querySelectorAll('.c')[i];
             console.log(VectorInput)
             VectorInput.id = 'slider-fg' + i
@@ -206,26 +290,81 @@ function ThreeScene() {
                         .getValue()
                 ]
                 arrayTest = new Float32Array(arrayTest)
-    
-                //VECTOR ARROW        
+
+                let array2 = Vector2.geometry.attributes.position.array
+                let arrayTest2 = [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    gui
+                        .__controllers[4]
+                        .getValue(),
+                    gui
+                        .__controllers[5]
+                        .getValue(),
+                    gui
+                        .__controllers[6]
+                        .getValue()
+                ]
+                arrayTest2 = new Float32Array(arrayTest2)
+
+                //VECTOR ARROW
 
                 new TWEEN
                     .Tween(array)
                     .to(arrayTest)
-                    .onStart(()=>{
+                    .onStart(() => {
                         new TWEEN
-                        .Tween(cone.position)
-                        .to({x: gui.__controllers[0].getValue(), y: gui.__controllers[1].getValue(), z: gui.__controllers[2].getValue(), isVector3: true})
-                        .start();
+                            .Tween(circle.position)
+                            .to({
+                                x: gui
+                                    .__controllers[0]
+                                    .getValue(),
+                                y: gui
+                                    .__controllers[1]
+                                    .getValue(),
+                                z: gui
+                                    .__controllers[2]
+                                    .getValue(),
+                                isVector3: true
+                            })
+                            .start()
                     })
                     .start();
+                new TWEEN
+                    .Tween(array2)
+                    .to(arrayTest2)
+                    .onStart(() => {
+                        new TWEEN
+                            .Tween(circle2.position)
+                            .to({
+                                x: gui
+                                    .__controllers[4]
+                                    .getValue(),
+                                y: gui
+                                    .__controllers[5]
+                                    .getValue(),
+                                z: gui
+                                    .__controllers[6]
+                                    .getValue(),
+                                isVector3: true
+                            })
+                            .start()
+                    })
+                    .start()
+
                 function animateTween(time) {
                     TWEEN.update(time)
                     requestAnimationFrame(animateTween)
+                    Vector2.geometry.attributes.position.needsUpdate = true; // required after the first render
+
                     VectorX.geometry.attributes.position.needsUpdate = true; // required after the first render
-               // cone.setRotationFromAxisAngle(coneRotation, coneRotationCalculator)
                 }
                 requestAnimationFrame(animateTween)
+
             })
         }
 
