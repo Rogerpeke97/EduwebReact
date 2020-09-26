@@ -46,7 +46,7 @@ function ThreeScene() {
             .add(params, 'Vector2y')
             .name('Vector2y')
         gui
-            .add(params, 'Vector1z')
+            .add(params, 'Vector2z')
             .name('Vector2z')
 
         scene.add(new THREE.AmbientLight(0x222222));
@@ -193,6 +193,7 @@ function ThreeScene() {
 
         let geometryCircle = new THREE.SphereGeometry(0.1, 32, 64);
         let materialCircle = new THREE.MeshPhongMaterial({color: 'green'});
+        let geometryCircle2 = new THREE.SphereGeometry(0.1, 32, 64);
         let materialCircle2 = new THREE.MeshPhongMaterial({color: 'blue'});
 
         //VECTOR 2 HIDE GUI VECTOR 2 UNTIL BOOLEAN IS CLICKED
@@ -234,7 +235,7 @@ function ThreeScene() {
                     document
                         .getElementById('AddVector2Bool')
                         .style
-                        .display = 'none'
+                        .visibility = 'hidden'
                 }
 
             })
@@ -246,7 +247,7 @@ function ThreeScene() {
             .position
             .set(0, 0, 0)
 
-        let circle2 = new THREE.Mesh(geometryCircle, materialCircle2);
+        let circle2 = new THREE.Mesh(geometryCircle2, materialCircle2);
 
         Vector2.add(circle2);
         Vector2.frustumCulled = false; // PREVENTS LINE FROM DISAPPEARING WHEN IT'S OUT OF CAMERA FRAME
@@ -354,7 +355,8 @@ function ThreeScene() {
                             })
                             .start()
                     })
-                    .start()
+                    .start();
+
 
                 function animateTween(time) {
                     TWEEN.update(time)
