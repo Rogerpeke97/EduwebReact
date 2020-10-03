@@ -8,7 +8,7 @@ const OrbitControls = require('three-orbit-controls')(THREE);
 
 function ThreeScene() {
     useEffect(() => {
-        let canvasContainer = document.getElementById('CanvasContainer')
+        const canvasContainer = document.getElementById('CanvasContainer')
         let scene = new THREE.Scene();
         let camera = new THREE.PerspectiveCamera(75, canvasContainer.clientWidth / canvasContainer.clientHeight, 0.1, 1000);
         let renderer = new THREE.WebGLRenderer({antialias: true});
@@ -78,6 +78,8 @@ function ThreeScene() {
         let axisGrid = new THREE.Vector3(1, 0, 0);
         gridHelper.rotateOnAxis(axisGrid, 1.5708) // THE ANGLE IS IN RADIANS, THIS IS 90 DEG
         scene.add(gridHelper);
+
+
 
         let pointsX = []; // X AXIS LINE
 
@@ -189,12 +191,30 @@ function ThreeScene() {
             .BufferGeometry()
             .setFromPoints(pointVector2);
 
+
+
+        //RESULTANT VECTOR ARRAY
+        let pointVectorResultant = []
+        pointVectorResultant.push(new THREE.Vector3(0, 0, 0));
+        pointVectorResultant.push(new THREE.Vector3(0, 0, 0));
+        pointVectorResultant.push(new THREE.Vector3(0, 0, 0));
+        let geometryVectorResultant = new THREE
+            .BufferGeometry()
+            .setFromPoints(pointVectorResultant);
+
+
         //GEOMETRY FOR THE CIRCLES
 
         let geometryCircle = new THREE.SphereGeometry(0.1, 32, 64);
         let materialCircle = new THREE.MeshPhongMaterial({color: 'green'});
         let geometryCircle2 = new THREE.SphereGeometry(0.1, 32, 64);
         let materialCircle2 = new THREE.MeshPhongMaterial({color: 'blue'});
+
+
+        //RESULTANT SPHERE
+
+        let geometryCircleResultant = new THREE.SphereGeometry(0.09, 32, 64);
+        let materialCircleResultant = new THREE.MeshPhongMaterial({color: 'red'});
 
         //VECTOR 2 HIDE GUI VECTOR 2 UNTIL BOOLEAN IS CLICKED
 
@@ -266,6 +286,29 @@ function ThreeScene() {
 
         scene.add(VectorX)
 
+
+        //RESULTANT VECTOR 
+        let vectorMaterialResultant = new THREE.MeshBasicMaterial({color: 'red'});
+        let VectorResultant = new THREE.Line(geometryVectorResultant, vectorMaterialResultant);
+        VectorResultant
+            .position
+            .set(0, 0, 0)
+
+        let circleResultant = new THREE.Mesh(geometryCircleResultant, materialCircleResultant);
+
+        VectorResultant.add(circleResultant);
+        VectorResultant.frustumCulled = false; // PREVENTS LINE FROM DISAPPEARING WHEN IT'S OUT OF CAMERA FRAME
+
+        scene.add(VectorResultant)
+
+
+
+
+
+
+
+
+
         for (let i = 0; i < 7; i++) {
             let VectorInput = document.querySelectorAll('.c')[i];
             console.log(VectorInput)
@@ -311,6 +354,83 @@ function ThreeScene() {
                         .getValue()
                 ]
                 arrayTest2 = new Float32Array(arrayTest2)
+
+
+
+                // RESULTANT ARRAY
+
+
+                let arrayResultant = VectorResultant.geometry.attributes.position.array              
+                let arrayTestResultant = [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    gui
+                        .__controllers[0]
+                        .getValue() + gui
+                        .__controllers[4]
+                        .getValue() ,
+                    gui
+                        .__controllers[1]
+                        .getValue() + gui
+                        .__controllers[5]
+                        .getValue(),
+                    gui
+                        .__controllers[2]
+                        .getValue() +  gui
+                        .__controllers[6]
+                        .getValue()
+                ]
+                arrayTestResultant = new Float32Array(arrayTestResultant)
+                //RESULTANT TWEEN
+                new TWEEN
+                .Tween(arrayResultant)
+                .to(arrayTestResultant)
+                .onStart(() => {
+                    new TWEEN
+                        .Tween(circleResultant.position)
+                        .to({
+                            x:  gui
+                            .__controllers[0]
+                            .getValue() + gui
+                            .__controllers[4]
+                            .getValue() ,
+                            y: gui
+                            .__controllers[1]
+                            .getValue() + gui
+                            .__controllers[5]
+                            .getValue(),
+                            z:  gui
+                            .__controllers[2]
+                            .getValue() +  gui
+                            .__controllers[6]
+                            .getValue(),
+                            isVector3: true
+                        })
+                        .start()
+                })
+                .start();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 //VECTOR ARROW
 
@@ -364,11 +484,70 @@ function ThreeScene() {
                     Vector2.geometry.attributes.position.needsUpdate = true; // required after the first render
 
                     VectorX.geometry.attributes.position.needsUpdate = true; // required after the first render
+
+                    VectorResultant.geometry.attributes.position.needsUpdate = true; // required after the first render
+
                 }
                 requestAnimationFrame(animateTween)
 
             })
         }
+
+
+        //RESULTANT
+
+
+
+
+
+
+
+        //MOUSE HOVER DATA
+ 
+        
+        function onMouseMove(event) {// SHOOTS A 3d RAY, IF OBJECT IS REACHED BY IT DOES SOMETHING
+
+            var mouse = new THREE.Vector3();
+            mouse.x = ( event.offsetX / canvasContainer.clientWidth ) * 2 - 1;
+            mouse.y = - ( event.offsetY / canvasContainer.clientHeight ) * 2 + 1;
+        
+            var raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera( mouse, camera );
+            var intersects = raycaster.intersectObject( Vector2.children[0] );//THE CIRCLE
+        
+            if(intersects.length > 0) {
+              intersects[0].object.material.color.set('white')
+            }
+            if(intersects.length === 0) {
+                circle2.material.color.set('blue')
+              }
+        
+        }
+
+        canvasContainer.addEventListener( 'mousemove', onMouseMove);
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         camera.position.z = 5;
         window.addEventListener('resize', onWindowResize, false);
